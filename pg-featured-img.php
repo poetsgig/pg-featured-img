@@ -1,14 +1,14 @@
 <?php
 /**
     Plugin Name: PG Featured Image
-    Plugin URI: 
+    Plugin URI: https://amyaulisi.com
     Description: This plugin shows the featured image on the sidebar, for single posts. 
     Author: Amy Aulisi
-	Author URI: 
+    Author URI: https://amyaulisi.com
     Version: 1.0
     License: GNU General Public License v2 or later
-	License URI: http://www.gnu.org/licenses/gpl-2.0.html
-	Text Domain: pg_featured_img
+    License URI: http://www.gnu.org/licenses/gpl-2.0.html
+    Text Domain: pg_featured_img
     Domain Path: /languages
 */
 
