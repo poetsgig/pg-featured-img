@@ -2,7 +2,7 @@
 /**
     Plugin Name: PG Featured Image
     Plugin URI: https://amyaulisi.com
-    Description: This plugin shows the featured image on the sidebar, for single posts. 
+    Description: This plugin shows the featured image on the sidebar, for single posts
     Author: Amy Aulisi
     Author URI: https://amyaulisi.com
     Version: 1.0
