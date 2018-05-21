@@ -55,7 +55,7 @@ After you setup a PG Featured Image widget, save the settings. You will see a do
 
 [do_widget id=pg_featured_img-3]
 
-There are two wats to show featured image in posts and pages:
+There are two ways to show featured image in posts and pages:
 
 2.1 Add the do_widget code to your post or page PHP template files. 
 2.2 Add the code directly inside the post, WP Admin dashboard > Posts > Edit Post; or you can also add in a page, WP Admin dashboard > Pages > Edit Page. Put the code wherever you want the featured image to be displayed.
@@ -64,7 +64,7 @@ There are two wats to show featured image in posts and pages:
 
 1. If you setup a widget for use only in the sidebar, simply deactivate the plugin. Go to Wordpress Admin dashboard > Plugin section. Hover down until you see "PG Featured Image" plugin and click "Deactivate"
 
-2. If you use the "amr shortcode any widget" to display featured image in a post or page, make sure to remove the do_widget code you added in your template files, or inside of your posts and pages. Sometimes, you do not need to deactivate "amr shortcode any widget", since you probably used its functionality to other widgets.
+2. If you use the "amr shortcode any widget" to display featured image in a post or page, make sure to remove the do_widget code you added in your template files, or inside of your posts and pages. Sometimes, you do not need to deactivate "amr shortcode any widget", because you probably are using its functionality to other widgets.
 
 == MultiSite ==
 This plugin has not been tested with multisite installation.
