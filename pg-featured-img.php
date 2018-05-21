@@ -1,12 +1,12 @@
 <?php
 /**
 Plugin Name: PG Featured Image
-Plugin URI: https://amyaulisi.com
+Plugin URI:  https://amyaulisi.com
 Description: This plugin shows the featured image on the sidebar, post and page
-Author: Amy Aulisi
-Author URI: https://amyaulisi.com
-Version: 1.0
-License: GNU General Public License v2 or later
+Author:      Amy Aulisi
+Author URI:  https://amyaulisi.com
+Version:     1.1
+License:     GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: pg_featured_img
 */
@@ -52,6 +52,9 @@ class pg_featured_img extends WP_Widget {
 		else {
                       $img_size = __('Select image size', 'pg-featured-image');
 		}
+		if ( isset( $instance[ 'display_img_title' ] ) ) {
+		      $instance['display_img_title'] = $instance[ 'display_img_title' ];
+		}
 		if ( isset( $instance[ 'display_caption' ] ) ) {
 		      $instance['display_caption'] = $instance[ 'display_caption' ];
 		}
@@ -80,18 +83,22 @@ class pg_featured_img extends WP_Widget {
                 <?php endforeach; ?>
 		</select>
 		</p>
-                <p>
-               <input class="checkbox" id="<?php echo $this->get_field_id('display_caption'); ?>" type="checkbox" <?php checked( $instance[ 'display_caption' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_caption' ); ?>"   /> 
+        <p>
+        <input class="checkbox" id="<?php echo $this->get_field_id('display_img_title'); ?>" type="checkbox" <?php checked( $instance[ 'display_img_title' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_img_title' ); ?>"   /> 
+    <label for="<?php echo $this->get_field_id( 'display_img_title' ); ?>">Display image title</label>
+        </p>
+        <p>
+        <input class="checkbox" id="<?php echo $this->get_field_id('display_caption'); ?>" type="checkbox" <?php checked( $instance[ 'display_caption' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_caption' ); ?>"   /> 
     <label for="<?php echo $this->get_field_id( 'display_caption' ); ?>">Display caption</label>
-               </p>
-                <p>
-               <input class="checkbox" id="<?php echo $this->get_field_id('display_description'); ?>" type="checkbox" <?php checked( $instance[ 'display_description' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_description' ); ?>"   /> 
+        </p>
+        <p>
+        <input class="checkbox" id="<?php echo $this->get_field_id('display_description'); ?>" type="checkbox" <?php checked( $instance[ 'display_description' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_description' ); ?>"   /> 
     <label for="<?php echo $this->get_field_id( 'display_description' ); ?>">Display description</label>
-               </p>
-                <p>
-               <input class="checkbox" id="<?php echo $this->get_field_id('display_excerpt'); ?>" type="checkbox" <?php checked( $instance[ 'display_excerpt' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_excerpt' ); ?>"   /> 
+        </p>
+        <p>
+        <input class="checkbox" id="<?php echo $this->get_field_id('display_excerpt'); ?>" type="checkbox" <?php checked( $instance[ 'display_excerpt' ], 1 ); ?> name="<?php echo $this->get_field_name( 'display_excerpt' ); ?>"   /> 
     <label for="<?php echo $this->get_field_id( 'display_excerpt' ); ?>">Display excerpt</label>
-               </p>
+        </p>
         <?php
 	}
         // Sanitize widget form values as they are saved
@@ -100,6 +107,7 @@ class pg_featured_img extends WP_Widget {
 		
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
                 //Add isset to check if key is set
+                $instance['display_img_title'] = isset( $new_instance['display_img_title'] ) ? 1 : 0;
                 $instance['display_caption'] = isset( $new_instance['display_caption'] ) ? 1 : 0;
                 $instance['display_description'] = isset( $new_instance['display_description'] ) ? 1 : 0;
                 $instance['display_excerpt'] = isset( $new_instance['display_excerpt'] ) ? 1 : 0;
@@ -111,6 +119,7 @@ class pg_featured_img extends WP_Widget {
 	// Render an array of default values
         private static function get_defaults() {
                $defaults = array(
+                  'display_img_title' => 0,
                   'display_caption' => 1,
                   'display_description' => 0,
                   'display_excerpt' => 0
@@ -122,6 +131,7 @@ class pg_featured_img extends WP_Widget {
                 extract( $args );
 		$size = isset( $instance['img-size'] );
 		$title = apply_filters( 'widget_title', $instance['title'] );
+                $display_img_title = isset( $instance[ 'display_img_title' ] ) ? 1 : 0;
 		$display_caption = isset( $instance[ 'display_caption' ] ) ? 1 : 0;
                 $display_description = isset( $instance[ 'display_description' ] ) ? 1 : 0;
                 $display_excerpt = isset( $instance[ 'display_excerpt' ] ) ? 1 : 0;
@@ -139,6 +149,14 @@ class pg_featured_img extends WP_Widget {
                            ?>
                           <div id='pg-featured-img'>
 			    <?php echo get_the_post_thumbnail($post->ID, $size); ?>  
+
+                                <?php if( 1 == $instance[ 'display_img_title' ] ) : ?>
+                                       <div class="pg-featured-img-title">
+                                          <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
+                                          <?php $img_title = $img_id->post_title; ?>
+                                          <?php echo $img_title; ?>
+                                       </div>
+                                <?php endif; ?>
 
                                 <?php if( 1 == $instance[ 'display_caption' ] ) : ?>
                                        <div class="pg-featured-img-caption">
@@ -171,6 +189,15 @@ class pg_featured_img extends WP_Widget {
 			} ?>
                        <div id='pg-featured-img'>
 			<?php echo get_the_post_thumbnail($post->ID, $size); ?>
+
+                                <?php if( 1 == $instance[ 'display__img_title' ] ) : ?>
+                                       <div class="pg-featured-img-title">
+                                          <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
+                                          <?php $img_title = $img_id->post_title; ?>
+                                          <?php echo $img_title; ?>
+                                       </div>
+                                <?php endif; ?>
+
                                 <?php if( 1 == $instance[ 'display_caption' ] ) : ?>
                                        <div class="pg-featured-img-caption">
                                           <?php echo get_the_post_thumbnail_caption($post); ?>
