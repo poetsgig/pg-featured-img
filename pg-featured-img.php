@@ -1,7 +1,7 @@
 <?php
 /**
 Plugin Name: PG Featured Image
-Plugin URI:  https://amyaulisi.com
+Plugin URI:  https://github.com/poetsgig/pg-featured-img
 Description: This plugin shows the featured image on the sidebar, post and page
 Author:      Amy Aulisi
 Author URI:  https://amyaulisi.com
