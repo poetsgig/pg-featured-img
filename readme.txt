@@ -42,7 +42,7 @@ It is very simple.
 
 As long as the post or page has a featured image, and you did step #7, it will automatically show in the sidebar.
 
-== How to Show in Posts and Pages ==
+== How to Show Featured Image in Posts and Pages ==
 
 Some themes already support featured image by default, like GeneratePress, Sela or TwentySixteen. If your theme does not support featured image:
 
@@ -57,7 +57,7 @@ Note that any change to your functions php is preferred to be done on a child th
 
 [do_widget id=pg_featured_img-3]
 
-To display the PG Featured Image widget anywhere on the post or  page, use the plugin "amr shortcode any widget". You can download the plugin here: https://wordpress.org/plugins/amr-shortcode-any-widget/
+To display the PG Featured Image widget anywhere on the post or page, use the plugin "amr shortcode any widget". You can download the plugin here: https://wordpress.org/plugins/amr-shortcode-any-widget/
 
 There are two ways to show featured image in posts and pages:
 
