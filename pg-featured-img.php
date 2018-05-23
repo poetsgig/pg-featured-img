@@ -5,7 +5,7 @@ Plugin URI: https://github.com/poetsgig/pg-featured-img
 Description: This plugin shows the featured image on the sidebar, post and page
 Author: Amy Aulisi
 Author URI: 
-Version: 1.2
+Version: 1.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: pg_featured_img
@@ -15,23 +15,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define('PGFI_WP_VERSION', '4.6');
-define('PGFI_PLUGIN', esc_html__('PG Featured Image', 'pgfi'));
-define('PGFI_PATH', plugin_basename(__FILE__));
+define('PG_FEATURED_IMAGE_WP_VERSION', '4.6');
+define('PG_FEATURED_IMAGE_PLUGIN', esc_html__('PG Featured Image', 'pgfi'));
+define('PG_FEATURED_IMAGE_PATH', plugin_basename(__FILE__));
 
+/**
+ * Check WP version when plugin is activated
+ * If incompatible, do not activate plugin
+ * and show warning notice.
+ */
+// After concept Jeff Starr/ USP
 function pgfi_require_wp_version() {
-	
 	$wp_version = get_bloginfo('version');
-	
 	if (isset($_GET['activate']) && $_GET['activate'] == 'true') {
-	      if (version_compare($wp_version, PGFI_WP_VERSION, '<')) {
-		  if (is_plugin_active(PGFI_PATH)) {
-				
-			deactivate_plugins(PGFI_PATH);
-				
-			$notice = '<strong>'. PGFI_PLUGIN .'</strong> ';
-			$notice .= esc_html__('requires WordPress ', 'pgfi') . PGFI_WP_VERSION;
-			$notice .= esc_html__(' or later version, and has been deactivated! ', 'pgfi');
+	    if (version_compare($wp_version, PG_FEATURED_IMAGE_WP_VERSION, '<')) {
+		  if (is_plugin_active(PG_FEATURED_IMAGE_PATH)) {		
+			deactivate_plugins(PG_FEATURED_IMAGE_PATH);	
+			$notice .= esc_html__('WordPress needs to be at least ', 'pgfi') . PG_FEATURED_IMAGE_WP_VERSION;
+			$notice .= esc_html__('to activate this plugin.', 'pgfi');
 			$notice .= esc_html__('Try again after your WordPress version is upgraded.', 'pgfi');
 				
 			wp_die($notice);
@@ -75,11 +76,11 @@ class pg_featured_img extends WP_Widget {
 		else {
 		      $title = __( 'New title', 'pg_featured_img' );
 		}
-		if ( isset( $instance[ 'img-size' ] ) ) {
-		      $instance['image-size'] = (!$instance['image-size'] || $instance['image-size'] == '') ? 'post-thumbnail' : $instance['image-size'];
+		if ( isset( $instance[ 'img_size' ] ) ) {
+		      $instance['img_size'] = (!$instance['img_size'] || $instance['img_size'] == '') ? 'post-thumbnail' : $instance['img_size'];
 		}
 		else {
-                      $img_size = __('Select image size', 'pg-featured-image');
+             $img_size = __('Select image size', 'pg-featured-image');
 		}
 		if ( isset( $instance[ 'display_img_title' ] ) ) {
 		      $instance['display_img_title'] = $instance[ 'display_img_title' ];
@@ -102,11 +103,11 @@ class pg_featured_img extends WP_Widget {
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id('img-size'); ?>"><?php _e( 'Select image size:', 'pg_featured_img' ); ?></label>
-		<select class="widefat" id="<?php echo $this->get_field_id('img-size'); ?>" name="<?php echo $this->get_field_name('img-size'); ?>">
+		<label for="<?php echo $this->get_field_id('img_size'); ?>"><?php _e( 'Select image size:', 'pg_featured_img' ); ?></label>
+		<select class="widefat" id="<?php echo $this->get_field_id('img_size'); ?>" name="<?php echo $this->get_field_name('img_size'); ?>">
                 <?php foreach (get_intermediate_image_sizes() as $intermediate_image_size) : ?>
         <?php
-        $selected = ($instance['img-size'] == $intermediate_image_size) ? ' selected="selected"' : '';
+        $selected = ($instance['img_size'] == $intermediate_image_size) ? ' selected="selected"' : '';
         ?>
         <option value="<?php echo $intermediate_image_size; ?>"<?php echo $selected; ?>><?php echo $intermediate_image_size; ?></option>
                 <?php endforeach; ?>
@@ -158,7 +159,7 @@ class pg_featured_img extends WP_Widget {
 	// Widget front-end
 	public function widget( $args, $instance ) {
                 extract( $args );
-		$size = isset( $instance['img-size'] );
+		$size = isset( $instance['img_size'] );
 		$title = apply_filters( 'widget_title', $instance['title'] );
                 $display_img_title = isset( $instance[ 'display_img_title' ] ) ? 1 : 0;
 		$display_caption = isset( $instance[ 'display_caption' ] ) ? 1 : 0;
@@ -179,7 +180,7 @@ class pg_featured_img extends WP_Widget {
                           <div id='pg-featured-img'>
 			    <?php echo get_the_post_thumbnail($post->ID, $size); ?>  
 
-                                <?php if( 1 == $display_img_title ) : ?>
+                                <?php if( 1 == $instance[ 'display_img_title' ] ) : ?>
                                        <div class="pg-featured-img-title">
                                           <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
                                           <?php $img_title = $img_id->post_title; ?>
@@ -187,13 +188,13 @@ class pg_featured_img extends WP_Widget {
                                        </div>
                                 <?php endif; ?>
 
-                                <?php if( 1 == $display_caption ) : ?>
+                                <?php if( 1 == $instance[ 'display_caption' ] ) : ?>
                                        <div class="pg-featured-img-caption">
                                           <?php echo get_the_post_thumbnail_caption($post); ?>
                                        </div>
                                   <?php endif; ?>
 
-                                <?php if( 1 == $display_description ) : ?>
+                                <?php if( 1 == $instance[ 'display_description' ]  ) : ?>
                                        <div class="pg-featured-img-desc">
                                           <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
                                           <?php $description = $img_id->post_content; ?>
@@ -201,7 +202,7 @@ class pg_featured_img extends WP_Widget {
                                        </div>
                                 <?php endif; ?>
 
-                                <?php if( 1 == $display_excerpt ) : ?>
+                                <?php if( 1 == $instance[ 'display_excerpt' ] ) : ?>
                                        <div class="pg-featured-img-excerpt">
                                           <?php echo get_the_excerpt($post); ?>
                                        </div>
@@ -219,7 +220,7 @@ class pg_featured_img extends WP_Widget {
                        <div id='pg-featured-img'>
 			<?php echo get_the_post_thumbnail($post->ID, $size); ?>
 
-                                <?php if( 1 == $display_img_title ) : ?>
+                                <?php if( 1 == $instance[ 'display_img_title' ] ) : ?>
                                        <div class="pg-featured-img-title">
                                           <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
                                           <?php $img_title = $img_id->post_title; ?>
@@ -227,13 +228,13 @@ class pg_featured_img extends WP_Widget {
                                        </div>
                                 <?php endif; ?>
 
-                                <?php if( 1 == $display_caption ) : ?>
+                                <?php if( 1 == $instance[ 'display_caption' ]  ) : ?>
                                        <div class="pg-featured-img-caption">
                                           <?php echo get_the_post_thumbnail_caption($post); ?>
                                        </div>
                                   <?php endif; ?>
 
-                                <?php if( 1 == $display_description ) : ?>
+                                <?php if( 1 == $instance[ 'display_description' ]  ) : ?>
                                        <div class="pg-featured-img-desc">
                                           <?php $img_id = get_post( get_post_thumbnail_id() ); ?>
                                           <?php $description = $img_id->post_content; ?>
@@ -241,7 +242,7 @@ class pg_featured_img extends WP_Widget {
                                        </div>
                                 <?php endif; ?>
 
-                                <?php if( 1 == $display_excerpt) : ?>
+                                <?php if( 1 == $instance[ 'display_excerpt' ] ) : ?>
                                        <div class="pg-featured-img-excerpt">
                                           <?php echo get_the_excerpt($post); ?>
                                        </div>

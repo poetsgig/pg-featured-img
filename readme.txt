@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, featured, sidebar, image, thumbnail, photo
 Requires at least: 4.6.0
 Tested up to: 4.9.6
-Stable Tag: 1.2
+Stable Tag: 1.3
 License: GPLv2
 
 == Description ==
@@ -79,6 +79,10 @@ This plugin supports WordPress installation using version 4.6.0 and later, due t
 == Frequently Asked Questions ==
 
 == Changelog ==
+
+= 1.3 =
+Revert setting on front-end for display_description
+Revert setting on front-end for display_img_title
 
 = 1.2 =
 * Require minimum WP version 4.6 before plugin can be activated
